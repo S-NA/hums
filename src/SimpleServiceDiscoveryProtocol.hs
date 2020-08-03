@@ -23,10 +23,13 @@ module SimpleServiceDiscoveryProtocol ( sendNotifyForever
 
 import Configuration
 import Network.Socket
+import Network.Socket.ByteString
 import Text.Printf
 import URIExtra
 import Control.Concurrent
 import Control.Monad
+import qualified Data.Text as T
+import Data.Text.Encoding (encodeUtf8)
 
 -- Notification message types.
 data MessageType = UpnpServiceNotification
@@ -60,13 +63,15 @@ generateNotifyAlive ai c msc messageType =
 sendRawMessage :: Configuration -> String -> IO ()
 sendRawMessage c m = do
   -- Addresses
-  sa <- inet_addr $ localNetIp c
-  da <- inet_addr "239.255.255.250"
+  sa:_ <- getAddrInfo Nothing (Just $ localNetIp c) (Just "0")
+  da:_ <- getAddrInfo Nothing (Just "239.255.255.250") (Just "1900")
   -- Open socket and send
-  sock <- socket AF_INET Datagram 0
-  bindSocket sock $ SockAddrInet aNY_PORT sa  -- Use local interface
-  _ <- sendTo sock m (SockAddrInet 1900 da)        -- Ignore return value
-  sClose sock
+  sock <- socket (addrFamily sa) Datagram defaultProtocol
+  sock2 <- socket (addrFamily da) Datagram defaultProtocol
+  bind sock $ addrAddress sa  -- Use local interface
+  connect sock2 (addrAddress da)
+  _ <- send sock2 $ encodeUtf8 . T.pack $  m
+  close sock
   return ()
 
 sendNotifyAlive :: ApplicationInformation -> Configuration -> MediaServerConfiguration -> MessageType -> IO ()

@@ -19,18 +19,19 @@ Data-Files:          hums.cfg
 
 Executable hums
   Build-Depends: base == 4.*
-               , blaze-builder >= 0.3 && <0.4
+               , blaze-builder >= 0.3 && <0.5
                , bytestring >= 0.9.0.1
                , ConfigFile >= 1.0.5
                , containers >= 0.1.0.1
                , directory >= 1.0.0.0
                , filepath >= 1.1.0.0
-               , HaXml >= 1.22 && <1.23
-               , http-types >= 0.8.3 && <0.9
+               , HaXml >= 1.22 && <1.26
+               , http-types >= 0.8.3 && <0.13
                , hxt >= 9.1 && < 9.4
                , MissingH >= 1.0.1
                , mtl >= 2.1
-               , network >= 2.4.1 && < 2.5
+               , network >= 3.0 && < 4
+               , network-uri >= 2.6
                , system-uuid >= 2.1 && < 2.2
                , system-filepath >= 0.4.7 && < 0.5
                , system-fileio >= 0.3.10 && < 0.4
