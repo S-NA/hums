@@ -19,7 +19,7 @@
 module Main (main) where
 
 import           Control.Concurrent
-import           Control.Monad.Error
+import           Control.Monad.Except
 import           Data.ConfigFile
 import           Data.IORef
 import           Data.UUID ()

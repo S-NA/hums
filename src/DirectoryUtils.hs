@@ -53,9 +53,9 @@ walkTree s0 f d = do
   -- Sort
   let sortedNames = sortBy compareNames allNames
   -- Traverse subdirectories and return accumulator.
-  foldM traverse s0 sortedNames
+  foldM traverseDir s0 sortedNames
   where
-    traverse s n = do
+    traverseDir s n = do
       st <- P.getFileStatus $ encode n
       if P.isRegularFile st
         then f s0 s st n
