@@ -32,7 +32,7 @@ import           Network.Wai.Handler.Warp (runSettings,
 import           Filesystem.Path (FilePath, (</>))
 import           Filesystem.Path.CurrentOS (decodeString, encodeString)
 import           Prelude hiding (FilePath)
-import qualified System.UUID.V4 as U
+import qualified Data.UUID.V4 as U
 import           Text.Printf
 
 import Configuration
@@ -106,7 +106,7 @@ main = niceSocketsDo $ do
   appInfo <- getApplicationInformation
 
   -- Build configurations, etc.
-  u <- fmap show U.uuid
+  u <- fmap show U.nextRandom
   putStrLn $ "My UUID is: " ++ u
   let mc = defaultMediaServerConfiguration u
   let services = [ ContentDirectoryDevice, ConnectionManagerDevice ]
