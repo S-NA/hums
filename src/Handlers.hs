@@ -38,7 +38,7 @@ import qualified Data.Text as T
 import           Data.Text.Encoding (encodeUtf8, decodeUtf8)
 import           Network.HTTP.Types (Status, Header, partialContent206, forbidden403, badRequest400, ok200, notFound404)
 import           Network.HTTP.Types.Header (hConnection, hContentLength, hContentType)
-import           Network.Wai (Application, Request, Response, responseStream, requestBody, requestHeaderRange, responseLBS)
+import           Network.Wai (Application, Request, Response, responseStream, getRequestBodyChunk, requestHeaderRange, responseLBS)
 import           Filesystem.Path (FilePath, (</>))
 import           Filesystem.Path.CurrentOS (encodeString, fromText)
 import qualified Filesystem as FS
@@ -159,7 +159,7 @@ serviceControlHandler (c,_,_,_,objects_) deviceType req respond = do
   objects <- readIORef objects_      -- Current snapshot of object tree.
   logMessage $ printf "Got request for CONTROL for service '%s'" $ deviceTypeToString deviceType
   -- Parse the SOAP request
-  requestXml <- requestBody req
+  requestXml <- getRequestBodyChunk req
   logMessage $ "Request: " ++ (show requestXml)
   action <- parseControlSoapXml $ T.unpack $ decodeUtf8 requestXml
   logMessage $ "Action: " ++ (show action)
