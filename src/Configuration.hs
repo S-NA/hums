@@ -24,7 +24,7 @@ module Configuration ( Configuration(..)
                      , parseConfiguration
                      ) where
 
-import           Control.Monad.Error
+import           Control.Monad.Except
 import           Data.ConfigFile
 import           Data.Either.Utils
 import           Data.Maybe
@@ -101,7 +101,7 @@ getServerHeaderValue (ApplicationInformation on ov an av) =
 
 parseConfiguration :: ConfigParser -> FilePath -> IO Configuration
 parseConfiguration cp0 cfname = do
-  cfg <- runErrorT $ do
+  cfg <- runExceptT $ do
            cf <- join $ liftIO $ readfile cp0 (encodeString cfname)
            ip <- get cf networkSection "listen_ip"
            port <- get cf networkSection "listen_port"
